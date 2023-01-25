@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title> Products </title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="browse.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+  <link rel="shortcut icon" href="#">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+      if(!<%=isLoggedIn %>){
+        //put the buttons in an array
+        var icons = document.getElementsByClassName("del");
+        for(var i = 0; i < icons.length; i++){
+          icons[i].style.display='none';// array to hide the del button
+        }
+      }
+      else{
+        if("<%=role%>" == "User"){
+           var icons = document.getElementsByClassName("del");
+          for (var i = 0; i < icons.length; i++) {
+            icons[i].style.display = 'none';
+          }
+        }
+         if ("<%=role%>" == "User") {
+              var icons = document.getElementsByClassName("insbtn");
+              for (var i = 0; i < icons.length; i++) {
+                icons[i].style.display = 'none';
+              }
+            }
+  
+      }
+    })
+  </script>
+</head>
+
+<body>
+
+  <header class="main-header">
+    
+    <nav class="main-nav nav">
+      
+      <ul>
+       
+        <form action="/" method="get">
+       
+        
+        <div class="mainbtn">
+        <button class="hbtn" style="color: black;border: none; margin-top: 15px;">
+          
+          <p>Logout</p>
+
+        </button>
+      </form>
+
+        <form action="/insert" method="get" id="download">
+          <button class="insbtn">
+            <div style="cursor: pointer;"><span class="material-symbols-outlined">
+                download
+              </span>
+            </div>
+          </button>
+        </form>
+       
+        </form>
+        
+    
+        <p></p>
+
+      </ul>
+      
+    </nav>
+    
+    <h1 class="band-name band-name-large">Groco Products</h1>
+  </header>
+  <section class="container content-section">
+    <h2 class="section-header">Fresh Products</h2>
+    <div class="shop-items">
+
+<% products.forEach(entries=> { %>
+      <div class="shop-item">
+        <span class="shop-item-title"><%=entries.name%></span>
+        <img class="shop-item-image" src="../image/<%=entries.image%>">
+        <div class="shop-item-details">
+          <span class="shop-item-price">$<%=entries.price%></span>
+          <button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button>
+          <!--go to the delete handler and send the object id with it-->
+          <form action="deleteitem/<%=entries._id%>" method="post" class="del">
+          <button id="delete" class="deleteicon" style="margin-left: 5px;"><i class="fas fa-trash"></i>
+          </form>
+</button>
+
+        </div>
+      </div>
+      <%})%>  
+  
+    </div>
+  </section>
+  <section class="container content-section">
+   
+   
+  </section>
+  <section class="container content-section">
+    <h2 class="section-header">CART</h2>
+    <div class="cart-row">
+      <span class="cart-item cart-header cart-column">ITEM</span>
+      <span class="cart-price cart-header cart-column">PRICE</span>
+      <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+    </div>
+    <div class="cart-items">
+      <div class="cart-row">
+        <div class="cart-item cart-column">
+          
+          <span class="cart-item-title"></span>
+        </div>
+        <span class="cart-price cart-column">$19.99</span>
+        <div class="cart-quantity cart-column">
+          <input class="cart-quantity-input" type="number" value="1">
+          <button class="btn btn-danger" type="button">REMOVE</button>
+        </div>
+      </div>
+      
+    </div>
+    <div class="cart-total">
+      <strong class="cart-total-title">Total:</strong>
+      <span class="cart-total-price">$0</span>
+    </div>
+    <form action="/purchase" method="get">
+    <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
+  </form>
+
+  </section>
+  <footer class="main-footer">
+    <div class="container main-footer-container">
+      <h3 class="band-name">Groco</h3>
+      
+    </div>
+  </footer>
+  <script>if (document.readyState == 'loading') {
+      document.addEventListener('DOMContentLoaded', ready)
+    } else {
+      ready()
+    }
+
+    function ready() {
+      var removeCartItemButtons = document.getElementsByClassName('btn-danger')
+      for (var i = 0; i < removeCartItemButtons.length; i++) {
+        var button = removeCartItemButtons[i]
+        button.addEventListener('click', removeCartItem)
+      }
+
+      var quantityInputs = document.getElementsByClassName('cart-quantity-input')
+      for (var i = 0; i < quantityInputs.length; i++) {
+        var input = quantityInputs[i]
+        input.addEventListener('change', quantityChanged)
+      }
+
+      var addToCartButtons = document.getElementsByClassName('shop-item-button')
+      for (var i = 0; i < addToCartButtons.length; i++) {
+        var button = addToCartButtons[i]
+        button.addEventListener('click', addToCartClicked)
+      }
+
+      document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+    }
+
+    function purchaseClicked() {
+    alert('Thank you for your purchase')
+      var cartItems = document.getElementsByClassName('cart-items')[0]
+      while (cartItems.hasChildNodes()) {
+        cartItems.removeChild(cartItems.firstChild)
+      }
+      updateCartTotal()
+    }
+
+    function removeCartItem(event) {
+      var buttonClicked = event.target
+      buttonClicked.parentElement.parentElement.remove()
+      updateCartTotal()
+    }
+
+    function quantityChanged(event) {
+      var input = event.target
+      if (isNaN(input.value) || input.value <= 0) {
+        input.value = 1
+      }
+      updateCartTotal()
+    }
+
+    function addToCartClicked(event) {
+      var button = event.target
+      var shopItem = button.parentElement.parentElement
+      var title = shopItem.getElementsByClassName('shop-item-title')[0].innerText
+      var price = shopItem.getElementsByClassName('shop-item-price')[0].innerText
+      var imageSrc = shopItem.getElementsByClassName('shop-item-image')[0].src
+      addItemToCart(title, price, imageSrc)
+      updateCartTotal()
+    }
+
+    function addItemToCart(title, price, imageSrc) {
+      var cartRow = document.createElement('div')
+      cartRow.classList.add('cart-row')
+      var cartItems = document.getElementsByClassName('cart-items')[0]
+      var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
+      for (var i = 0; i < cartItemNames.length; i++) {
+        if (cartItemNames[i].innerText == title) {
+          alert('This item is already added to the cart')
+          return
+        }
+      }
+      var cartRowContents = `
+        <div class="cart-item cart-column">
+            <img class="cart-item-image" src="${imageSrc}" width="100" height="100">
+            <span class="cart-item-title">${title}</span>
+        </div>
+        <span class="cart-price cart-column">${price}</span>
+        <div class="cart-quantity cart-column">
+            <input class="cart-quantity-input" type="number" value="1">
+            <button class="btn btn-danger" type="button">REMOVE</button>
+        </div>`
+      cartRow.innerHTML = cartRowContents
+      cartItems.append(cartRow)
+      cartRow.getElementsByClassName('btn-danger')[0].addEventListener('click', removeCartItem)
+      cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
+    }
+
+    function updateCartTotal() {
+      var cartItemContainer = document.getElementsByClassName('cart-items')[0]
+      var cartRows = cartItemContainer.getElementsByClassName('cart-row')
+      var total = 0
+      for (var i = 0; i < cartRows.length; i++) {
+        var cartRow = cartRows[i]
+        var priceElement = cartRow.getElementsByClassName('cart-price')[0]
+        var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
+        var price = parseFloat(priceElement.innerText.replace('$', ''))
+        var quantity = quantityElement.value
+        total = total + (price * quantity)
+      }
+      total = Math.round(total * 100) / 100
+      document.getElementsByClassName('cart-total-price')[0].innerText = '$' + total
+    }</script>
+</body>
+
+</html>

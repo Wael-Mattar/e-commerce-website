@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Insert data</title>
+	
+	<link rel="stylesheet" href="insert.css">
+</head>
+
+<body>
+	<div class="box">
+		<form autocomplete="off"  action='/upload' method="post">
+			<h2>Insert Form</h2>
+			<div class="inputBox">
+				<input type="text" name="name" required="required">
+				<span>Name</span>
+				<i></i>
+			</div>
+			<div class="inputBox">
+				<input type="file" name="image" required="required" accept="image/*">
+				<span></span>
+				<i></i>
+			</div>
+			<div class="inputBox">
+				<input type="number" name="price" required="required">
+			<span>Price</span>
+			<i></i>
+			</div>
+			<button class="btn">Insert</button>
+		</form>
+	</div>
+
+
+</body>
+
+</html>

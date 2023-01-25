@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Insert data</title>
+
+	<!-- Fontawesome CDN Link -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+	<link rel="stylesheet" href="forms.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+
+	<div class="container">
+		<input type="checkbox" id="flip">
+		<div class="cover">
+			<div class="front">
+				<img src="image/blog-1.jpg" alt="">
+				<div class="text">
+					<span class="text-1">Fresh Fruits </span>
+					<span class="text-2">Let's get connected</span>
+				</div>
+			</div>
+			<div class="back">
+				<img src="image/blog-3.jpg" alt="">
+				<div class="text">
+					<span class="text-1">Fresh Vegetables</span>
+					<span class="text-2">Come on!</span>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="forms">
+			<div class="form-content">
+				<div class="login-form">
+					<div class="title">Login</div>
+					<form id="form" method="post">
+						<div class="input-boxes">
+							<div class="input-box">
+								<i class="fas fa-envelope"></i>
+								<input type="text" name="email" placeholder="Enter your email" required>
+							</div>
+							<div class="input-box">
+								<i class="fas fa-lock"></i>
+								<input type="password" name="password" placeholder="Enter your password" required>
+							</div>
+							<div class="text"><a href="/forgetpass">Forgot password?</a></div>
+							<div class="button input-box">
+								<input type="submit" value="Login" class="btn btn-success">
+							</div>
+
+							<div class="mssg bg-danger">
+								<span id="check"></span>
+							</div>
+
+							<div id="LangTable"><a href="/browse" id="aa"></a>
+							</div>
+
+							<div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label>
+							</div>
+							<div id="LangTable"><a href="/browse" id="aa"></a>
+							</div>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$(document).ready(function () {
+
+						$("#form").submit(function (event) {
+							event.preventDefault();
+
+							$.ajax({
+								type: 'POST',
+								url: '/login',
+								data: $('#form').serialize(),
+								dataType: "json",
+								success: function (response) {
+									//alert("a");
+									//console.log(response.Success);
+									$('#form')[0].reset();
+									document.getElementById("check").innerHTML = response.Success;
+									//ADD THIS CODE
+									setTimeout(function () {
+										document.getElementById("check").innerHTML = "";
+									}, 3000);
+									if (response.Success == "Success!") {
+										document.getElementById("aa").click();
+									};
+								},
+								error: function () {
+								}
+							})
+						});
+
+					});
+				</script>
+
+			</div>
+
+
+			<div class="signup-form">
+				<div class="title">Signup</div>
+				<form id="form1" method="post">
+					<div class="input-boxes">
+
+						<div class="input-box">
+							<i class="fas fa-envelope"></i>
+							<input type="text" name="email" placeholder="Enter your email" required>
+						</div>
+						<div class="input-box">
+							<i class="fas fa-user"></i>
+							<input type="text" name="username" placeholder="Enter your name" required>
+						</div>
+						<div class="input-box">
+							<i class="fas fa-lock"></i>
+							<input type="password" name="password" placeholder="Enter your password" required>
+						</div>
+						<div class="input-box">
+							<i class="fas fa-lock"></i>
+							<input type="password" name="passwordConf" placeholder="Confirm password" required>
+						</div>
+						<div class="button input-box">
+							<input type="submit" value="Register" class="btn btn-success">
+						</div>
+
+						<div class="mssg bg-danger">
+							<span id="check"></span>
+						</div>
+						<div id="LangTable"><a href="/login" id="aa"></a>
+						</div>
+						<div class="text sign-up-text">Already have an account? <label for="flip">Login now</label>
+						</div>	
+
+				</form>
+			</div>
+
+			<script type="text/javascript">
+				$(document).ready(function () {
+
+					$("#form1").submit(function (event) {
+						event.preventDefault();
+
+						$.ajax({
+							type: 'POST',
+							url: '/',
+							data: $('#form1').serialize(),
+							dataType: "json",
+
+							success: function (response) {
+								//alert("a");
+								//console.log(response.Success);
+								$('#form1')[0].reset();
+
+								document.getElementById("check").innerHTML = response.Success;
+								//ADD THIS CODE
+								setTimeout(function () {
+									document.getElementById("check").innerHTML = "";
+								}, 3000);
+								if (response.Success == "You are registered,You can login now.") {
+									document.getElementById("aa").click();
+								};
+							},
+							error: function () {
+							}
+						})
+					});
+				});
+			</script>
+
+		</div>
+	</div>
+	</div>
+	</div>
+
+</body>
+
+</html>
